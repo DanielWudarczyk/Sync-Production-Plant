@@ -1,0 +1,12 @@
+lines: 3
+raw_materials:
+  A:
+    initial_stock: 10
+    min_threshold: 3
+    delivery_amount: 5
+  B:
+    initial_stock: 12
+    min_threshold: 4
+    delivery_amount: 6
+finished_goods:
+  pack_size: 5
