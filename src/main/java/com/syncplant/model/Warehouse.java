@@ -1,23 +1,31 @@
 package com.syncplant.model;
 
 public class Warehouse {
-    private String name;
+    private final String warehouseSymbol;
     private int stock;
     private int threshold;
     private boolean needsSupply;
     private SupplyTruck truck;
 
-    public Warehouse(String name, int initialStock, int threshold, SupplyTruck truck) {
-        this.name = name;
+    public Warehouse(String symbol, int initialStock, int threshold, SupplyTruck truck) {
+        warehouseSymbol = symbol;
         stock = initialStock;
         this.threshold = threshold;
         needsSupply = false;
         this.truck = truck;
     }
 
+    // take raw material from warehouse
     public synchronized boolean take(int amount) {
         if (amount <= stock) {
+            // delay simulating the time needed to take materials from warehouse
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                System.out.println("Warehouse " + warehouseSymbol + " interrupted while materials retrieval");
+            }
             stock -= amount;
+            System.out.println("WH " + warehouseSymbol + ": stock-" + stock + ", " + amount + " units of material was taken");
             if (stock < threshold && !needsSupply) {
                 needsSupply = true;
                 truck.notifyTruck();
@@ -31,15 +39,32 @@ public class Warehouse {
         return needsSupply;
     }
 
-    public String getName() {
-        return name;
+    public String getSymbol() {
+        return warehouseSymbol;
     }
 
+    // deliver raw materials to warehouse
     public void refill(int amount) {
+        // delay simulating the time needed to replenish materials
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException e) {
+            System.out.println("Warehouse " + warehouseSymbol + " interrupted while materials replenishing");
+        }
+
         stock += amount;
+        System.out.println("WH " + warehouseSymbol + ": stock-" + stock + ", " + amount + " units of material was delivered");
         if (stock >= threshold) {
             needsSupply = false;
         }
+    }
+
+    public boolean isSufficientAmount(int amount) {
+        return stock >= amount;
+    }
+
+    public void setTruck(SupplyTruck truck) {
+        this.truck = truck;
     }
 
 }

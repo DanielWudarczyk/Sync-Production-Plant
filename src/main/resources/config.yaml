@@ -1,12 +1,13 @@
-lines: 3
-raw_materials:
-  A:
-    initial_stock: 10
-    min_threshold: 3
-    delivery_amount: 5
-  B:
-    initial_stock: 12
-    min_threshold: 4
-    delivery_amount: 6
-finished_goods:
-  pack_size: 5
+warehouseA:
+    initial_stock: 15
+    threshold: 5
+
+warehouseB:
+    initial_stock: 20
+    threshold: 8
+
+delivery_amount: 10
+
+number_of_production_lines: 4
+required_A_amount: 2
+required_B_amount: 3
