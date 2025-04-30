@@ -1,19 +1,23 @@
 package com.syncplant.model;
 
-public class ProductionLine extends Thread {
+import java.util.concurrent.ThreadLocalRandom;
+
+public class ProductionLine implements Runnable {
     private final int lineNumber;
     private final Warehouse warehouseA;
     private final Warehouse warehouseB;
     private int requiredAAmount;    //required amount of raw material A
     private int requiredBAmount;    //required amount of raw material B
+    private OutboundWarehouse outboundWarehouse;
 
 
-    public ProductionLine(int lineNumber, Warehouse warehouseA, Warehouse warehouseB, int requiredAAmount, int requiredBAmount) {
+    public ProductionLine(int lineNumber, Warehouse warehouseA, Warehouse warehouseB, int requiredAAmount, int requiredBAmount, OutboundWarehouse outboundWarehouse) {
         this.lineNumber = lineNumber;
         this.requiredAAmount = requiredAAmount;
         this.requiredBAmount = requiredBAmount;
         this.warehouseA = warehouseA;
         this.warehouseB = warehouseB;
+        this.outboundWarehouse = outboundWarehouse;
     }
 
     @Override
@@ -72,13 +76,18 @@ public class ProductionLine extends Thread {
             }
 
             // producing
-            // delay simulating the time needed to produce
+            // delay simulating random time needed to produce
             try {
-                Thread.sleep(1500);
+                int sleepTime = ThreadLocalRandom.current().nextInt(500, 2000);
+                Thread.sleep(sleepTime);
             } catch (InterruptedException e) {
                 System.out.println("Production line number " + lineNumber + " interrupted while producing");
             }
             System.out.println("PL " + lineNumber + ": produced product");
+
+            // storing products in the outbound warehouse
+            outboundWarehouse.store();
+
 
         }
     }

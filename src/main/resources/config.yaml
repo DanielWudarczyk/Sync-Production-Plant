@@ -11,3 +11,5 @@ delivery_amount: 10
 number_of_production_lines: 4
 required_A_amount: 2
 required_B_amount: 3
+
+package_capacity: 5
