@@ -1,12 +1,16 @@
 package com.syncplant.model;
 
+import com.syncplant.gui.MainApp;
+
 import java.util.concurrent.ThreadLocalRandom;
 
 public class OutboundTruck extends Thread{
     OutboundWarehouse outboundWarehouse;
+    private MainApp gui;
 
-    public OutboundTruck(OutboundWarehouse outboundWarehouse) {
+    public OutboundTruck(OutboundWarehouse outboundWarehouse, MainApp gui) {
         this.outboundWarehouse = outboundWarehouse;
+        this.gui = gui;
     }
 
     @Override

@@ -1,14 +1,18 @@
 package com.syncplant.model;
 
+import com.syncplant.gui.MainApp;
+
 public class OutboundWarehouse {
     private final int packageCapacity;
     private int unpackedProductCount;
     private int packageCount;
+    private MainApp mainApp;
 
-    public OutboundWarehouse(int packageCapacity) {
+    public OutboundWarehouse(int packageCapacity, MainApp mainApp) {
         this.packageCapacity = packageCapacity;
         this.unpackedProductCount = 0;
         this.packageCount = 0;
+        this.mainApp = mainApp;
     }
 
     // store products in warehouse

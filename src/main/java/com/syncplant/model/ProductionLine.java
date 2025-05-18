@@ -1,5 +1,8 @@
 package com.syncplant.model;
 
+import com.syncplant.gui.MainApp;
+import javafx.application.Platform;
+
 import java.util.concurrent.ThreadLocalRandom;
 
 public class ProductionLine implements Runnable {
@@ -9,15 +12,17 @@ public class ProductionLine implements Runnable {
     private int requiredAAmount;    //required amount of raw material A
     private int requiredBAmount;    //required amount of raw material B
     private OutboundWarehouse outboundWarehouse;
+    private MainApp gui;
 
 
-    public ProductionLine(int lineNumber, Warehouse warehouseA, Warehouse warehouseB, int requiredAAmount, int requiredBAmount, OutboundWarehouse outboundWarehouse) {
+    public ProductionLine(int lineNumber, Warehouse warehouseA, Warehouse warehouseB, int requiredAAmount, int requiredBAmount, OutboundWarehouse outboundWarehouse, MainApp gui) {
         this.lineNumber = lineNumber;
         this.requiredAAmount = requiredAAmount;
         this.requiredBAmount = requiredBAmount;
         this.warehouseA = warehouseA;
         this.warehouseB = warehouseB;
         this.outboundWarehouse = outboundWarehouse;
+        this.gui = gui;
     }
 
     @Override
@@ -84,6 +89,11 @@ public class ProductionLine implements Runnable {
                 System.out.println("Production line number " + lineNumber + " interrupted while producing");
             }
             System.out.println("PL " + lineNumber + ": produced product");
+
+            // product produced - notify the GUI
+            Platform.runLater(() -> {
+                gui.log("PL " + lineNumber + ": produced product");
+            });
 
             // storing products in the outbound warehouse
             outboundWarehouse.store();

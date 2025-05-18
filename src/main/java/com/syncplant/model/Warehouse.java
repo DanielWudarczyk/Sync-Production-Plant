@@ -1,18 +1,22 @@
 package com.syncplant.model;
 
+import com.syncplant.gui.MainApp;
+
 public class Warehouse {
     private final String warehouseSymbol;
     private int stock;
     private int threshold;
     private boolean needsSupply;
     private SupplyTruck truck;
+    private MainApp gui;
 
-    public Warehouse(String symbol, int initialStock, int threshold, SupplyTruck truck) {
+    public Warehouse(String symbol, int initialStock, int threshold, SupplyTruck truck, MainApp gui) {
         warehouseSymbol = symbol;
         stock = initialStock;
         this.threshold = threshold;
         needsSupply = false;
         this.truck = truck;
+        this.gui = gui;
     }
 
     // take raw material from warehouse
@@ -26,6 +30,14 @@ public class Warehouse {
             }
             stock -= amount;
             System.out.println("WH " + warehouseSymbol + ": stock-" + stock + ", " + amount + " units of material was taken");
+
+            // warehouse update in the GUI
+            if (warehouseSymbol.equals("A")) {
+                gui.updateWarehouseA(stock);
+            } else {
+                gui.updateWarehouseB(stock);
+            }
+
             if (stock < threshold && !needsSupply) {
                 needsSupply = true;
                 truck.notifyTruck();
@@ -54,6 +66,14 @@ public class Warehouse {
 
         stock += amount;
         System.out.println("WH " + warehouseSymbol + ": stock-" + stock + ", " + amount + " units of material was delivered");
+
+        // warehouse update in the GUI
+        if (warehouseSymbol.equals("A")) {
+            gui.updateWarehouseA(stock);
+        } else {
+            gui.updateWarehouseB(stock);
+        }
+
         if (stock >= threshold) {
             needsSupply = false;
         }
