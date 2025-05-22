@@ -1,6 +1,6 @@
 package com.syncplant.model;
 
-import com.syncplant.gui.MainApp;
+import com.syncplant.Main;
 
 public class Warehouse {
     private final String warehouseSymbol;
@@ -8,9 +8,9 @@ public class Warehouse {
     private int threshold;
     private boolean needsSupply;
     private SupplyTruck truck;
-    private MainApp gui;
+    private Main gui;
 
-    public Warehouse(String symbol, int initialStock, int threshold, SupplyTruck truck, MainApp gui) {
+    public Warehouse(String symbol, int initialStock, int threshold, SupplyTruck truck, Main gui) {
         warehouseSymbol = symbol;
         stock = initialStock;
         this.threshold = threshold;

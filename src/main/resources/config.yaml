@@ -1,12 +1,12 @@
 warehouseA:
-    initial_stock: 15
-    threshold: 5
+    initial_stock: 30
+    threshold: 10
 
 warehouseB:
-    initial_stock: 20
-    threshold: 8
+    initial_stock: 40
+    threshold: 15
 
-delivery_amount: 10
+delivery_amount: 25
 
 number_of_production_lines: 4
 required_A_amount: 2

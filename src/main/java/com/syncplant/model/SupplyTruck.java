@@ -1,6 +1,6 @@
 package com.syncplant.model;
 
-import com.syncplant.gui.MainApp;
+import com.syncplant.Main;
 
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -9,9 +9,9 @@ public class SupplyTruck extends Thread {
     private final Warehouse[] warehouses;
     private final int deliveryAmount;
     private final ProductionLine[] productionLines;
-    private MainApp gui;
+    private Main gui;
 
-    public SupplyTruck(Warehouse[] warehouses, int deliveryAmount, ProductionLine[] productionLines, MainApp gui) {
+    public SupplyTruck(Warehouse[] warehouses, int deliveryAmount, ProductionLine[] productionLines, Main gui) {
         this.warehouses = warehouses;
         this.deliveryAmount = deliveryAmount;
         this.productionLines = productionLines;

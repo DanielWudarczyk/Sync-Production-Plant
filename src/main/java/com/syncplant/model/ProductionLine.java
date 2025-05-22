@@ -1,8 +1,7 @@
 package com.syncplant.model;
 
-import com.syncplant.gui.MainApp;
+import com.syncplant.Main;
 import javafx.application.Platform;
-
 import java.util.concurrent.ThreadLocalRandom;
 
 public class ProductionLine implements Runnable {
@@ -12,10 +11,10 @@ public class ProductionLine implements Runnable {
     private int requiredAAmount;    //required amount of raw material A
     private int requiredBAmount;    //required amount of raw material B
     private OutboundWarehouse outboundWarehouse;
-    private MainApp gui;
+    private Main gui;
 
 
-    public ProductionLine(int lineNumber, Warehouse warehouseA, Warehouse warehouseB, int requiredAAmount, int requiredBAmount, OutboundWarehouse outboundWarehouse, MainApp gui) {
+    public ProductionLine(int lineNumber, Warehouse warehouseA, Warehouse warehouseB, int requiredAAmount, int requiredBAmount, OutboundWarehouse outboundWarehouse, Main gui) {
         this.lineNumber = lineNumber;
         this.requiredAAmount = requiredAAmount;
         this.requiredBAmount = requiredBAmount;
@@ -28,6 +27,8 @@ public class ProductionLine implements Runnable {
     @Override
     public void run() {
         while (true) {
+            //CountDownLatch materialsTaken = new CountDownLatch(2);
+
             // thread to take raw material A from and warehouse
             Thread takeMaterialA = new Thread(() -> {
                 if(!warehouseA.take(requiredAAmount)) {
@@ -67,6 +68,10 @@ public class ProductionLine implements Runnable {
                 }
             });
 
+            // show in GUI info about taking materials
+            Platform.runLater(() -> gui.updateLineStatus(lineNumber, "taking " + requiredAAmount + "xA, " + requiredBAmount + "xB"));
+            long messageStart = System.currentTimeMillis();
+
             // start of parallel material taking
             System.out.println("PL " + lineNumber + ": starts taking materials.");
             takeMaterialA.start();
@@ -80,7 +85,20 @@ public class ProductionLine implements Runnable {
                 System.out.println("Production line number " + lineNumber + " interrupted while waiting for the materials.");
             }
 
+            // check if the second elapsed
+            long elapsed = System.currentTimeMillis() - messageStart;
+            if (elapsed < 1000) {
+                try {
+                    Thread.sleep(1000 - elapsed);
+                } catch (InterruptedException e) {
+                    System.out.println("PL " + lineNumber + " interrupted during message delay.");
+                    continue;
+                }
+            }
+
             // producing
+            Platform.runLater(() -> gui.updateLineStatus(lineNumber, "producing"));
+
             // delay simulating random time needed to produce
             try {
                 int sleepTime = ThreadLocalRandom.current().nextInt(500, 2000);
@@ -92,8 +110,11 @@ public class ProductionLine implements Runnable {
 
             // product produced - notify the GUI
             Platform.runLater(() -> {
-                gui.log("PL " + lineNumber + ": produced product");
+                gui.updateLineStatus(lineNumber, "produced product");
             });
+
+            // make product icon which goes to the outbound warehouse
+            gui.makeProductIcon(lineNumber);
 
             // storing products in the outbound warehouse
             outboundWarehouse.store();
