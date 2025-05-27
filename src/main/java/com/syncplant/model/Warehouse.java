@@ -56,7 +56,7 @@ public class Warehouse {
     }
 
     // deliver raw materials to warehouse
-    public void refill(int amount) {
+    public synchronized void refill(int amount) {
         // delay simulating the time needed to replenish materials
         try {
             Thread.sleep(300);
@@ -79,7 +79,7 @@ public class Warehouse {
         }
     }
 
-    public boolean isSufficientAmount(int amount) {
+    public synchronized boolean isSufficientAmount(int amount) {
         return stock >= amount;
     }
 

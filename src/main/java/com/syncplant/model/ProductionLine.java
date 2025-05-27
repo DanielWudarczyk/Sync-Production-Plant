@@ -27,8 +27,6 @@ public class ProductionLine implements Runnable {
     @Override
     public void run() {
         while (true) {
-            //CountDownLatch materialsTaken = new CountDownLatch(2);
-
             // thread to take raw material A from and warehouse
             Thread takeMaterialA = new Thread(() -> {
                 if(!warehouseA.take(requiredAAmount)) {
@@ -101,7 +99,7 @@ public class ProductionLine implements Runnable {
 
             // delay simulating random time needed to produce
             try {
-                int sleepTime = ThreadLocalRandom.current().nextInt(500, 2000);
+                int sleepTime = ThreadLocalRandom.current().nextInt(1500, 4000);
                 Thread.sleep(sleepTime);
             } catch (InterruptedException e) {
                 System.out.println("Production line number " + lineNumber + " interrupted while producing");
